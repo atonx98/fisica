@@ -1,5 +1,10 @@
 import tkinter as tk # ejecutar "sudo apt-get install python3-tk" si hay problemas con la importac
 from tkinter import ttk
+import numpy as np
+import matplotlib as mpl
+from matplotlib.figure import Figure
+from matplotlib.backends.backend_tkagg import (
+    FigureCanvasTkAgg, NavigationToolbar2Tk)
 
 
 def boton_posicion():
@@ -86,7 +91,11 @@ class Interface:
 
         self.pestañas = ttk.Notebook(self.window)
         self.tab_ideal = ttk.Frame(self.pestañas)
+
+        self.graphics = ttk.Labelframe(self.tab_ideal)
         self.opciones = ttk.Frame(self.tab_ideal)
+
+
 
         # Inicializar los botones de la interfaz
         self.boton_posicion = ttk.Button(self.opciones, text="Posición", width=10, command=lambda: boton_posicion())
@@ -133,10 +142,17 @@ class Interface:
 
         def limpiar_entrada_aceleracion(event):
             if self.entrada_aceleracion_inicial.get() == "Aceleración":
-                self.entrada_aceleracion_inicial.delete(0,'end')+
+                self.entrada_aceleracion_inicial.delete(0,'end')
 
+        # inicializa una visualizacion inicial
 
+        fig = Figure(figsize=(5, 4), dpi=100)
+        t = np.arange(0, 3, .01)
+        fig.add_subplot(111).plot(t, 2 * np.sin(2 * np.pi * t))
 
+        canvas = FigureCanvasTkAgg(fig, master=self.graphics)  # A tk.DrawingArea.
+        canvas.draw()
+        canvas.get_tk_widget().pack(side=tk.TOP, fill=tk.BOTH, expand=1)
 
         # Variables de los deslizadores
         posicion_x0 = tk.IntVar()
@@ -169,8 +185,8 @@ class Interface:
         self.boton_vector_normal.pack(side=tk.TOP, padx=10, pady=10)
         self.boton_circulo_osculador.pack(side=tk.TOP, padx=10, pady=10)
 
-        graphics = ttk.LabelFrame(self.tab_ideal, text="Gráfica")
-        graphics.pack(side=tk.TOP, fill=tk.BOTH, expand=True, padx=5, pady=5)
+        self.graphics = ttk.Labelframe(self.tab_ideal, text="Grafica")
+        self.graphics.pack(side=tk.TOP, fill=tk.BOTH, expand=True, padx=5, pady=5)
 
         separador = ttk.Separator(self.tab_ideal, orient="horizontal")
         separador.pack(side=tk.TOP, expand=False, fill=tk.X)
