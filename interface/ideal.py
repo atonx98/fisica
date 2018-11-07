@@ -144,16 +144,6 @@ class Interface:
             if self.entrada_aceleracion_inicial.get() == "Aceleración":
                 self.entrada_aceleracion_inicial.delete(0,'end')
 
-        # inicializa una visualizacion inicial
-
-        fig = Figure(figsize=(5, 4), dpi=100)
-        t = np.arange(0, 3, .01)
-        fig.add_subplot(111).plot(t, 2 * np.sin(2 * np.pi * t))
-
-        canvas = FigureCanvasTkAgg(fig, master=self.graphics)  # A tk.DrawingArea.
-        canvas.draw()
-        canvas.get_tk_widget().pack(side=tk.TOP, fill=tk.BOTH, expand=1)
-
         # Variables de los deslizadores
         posicion_x0 = tk.IntVar()
         posicion_y0 = tk.IntVar()
@@ -249,7 +239,14 @@ class Interface:
         self.deslizador_aceleracion_inicial.bind("<B1-Motion>", f_aceleracion_inicial)
         self.deslizador_aceleracion_inicial.bind("<ButtonRelease-1>", f_aceleracion_inicial)
 
+        # inicializa una visualizacion inicial
 
+        fig = Figure(figsize=(5, 4), dpi=100)
+        t = np.arange(0, 3, .01)
+        fig.add_subplot(111).plot(t, 2 * np.sin(2 * np.pi * t))
+        canvas = FigureCanvasTkAgg(fig, master=self.graphics)  # A tk.DrawingArea.
+        canvas.draw()
+        canvas.get_tk_widget().pack(side=tk.TOP, fill=tk.BOTH, expand=1)
 
     # Todo declarar todos los elementos de la interfaz dentro del __init__
     def update_position_value(self):
